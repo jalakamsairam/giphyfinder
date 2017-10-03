@@ -16,7 +16,7 @@
 
 // 7. Deploy your assignment to Github Pages. -->
 
-var games = ["gears of war", "medal of honor", "call of duty", "black ops"];
+var games = ["gears of war", "medal of honor", "call of duty", "sniper", "Grand theft auto","hitman","half life"];
 function displayGameGifs(){
  
 var game = ($(this).attr("data-name"));
@@ -32,7 +32,7 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +game+ "&api_key=dc6zaT
           console.log(response);
 
           var results = response.data;
-
+          $("#image-container").empty();
           for( let i = 0; i< results.length; i++){
 
             var gameDiv = $("<div class = 'col-lg-4'>");
@@ -42,9 +42,10 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +game+ "&api_key=dc6zaT
             gameImage.attr("data-still",results[i].images.fixed_height_still.url);
             gameImage.attr("data-animate",results[i].images.fixed_height.url);
             gameImage.attr("data-state","still");
-            gameImage.attr("class", "gif");
-            gameImage.attr("height","200px");
-            gameImage.attr("width","200px");
+            gameImage.attr("id", "gif"+i);
+            gameImage.css("height","200px");
+            gameImage.css("width","200px");
+            gameImage.attr("onclick","test("+i+")");
             gameDiv.append(gameImage);
             gameDiv.prepend(p);
             $("#image-container").prepend(gameDiv);
@@ -53,6 +54,23 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +game+ "&api_key=dc6zaT
            
         });
           }
+
+
+        function test(i){
+        let id = "#gif"+i;
+        let This = $(id);
+        let state = ($(id).attr("data-state")); 
+
+        if (state === "still") {
+          $(This).attr("src", $(This).attr("data-animate"));
+          $(This).attr("data-state", "animate");
+        } else {
+          $(This).attr("src", $(This).attr("data-still"));
+          $(This).attr("data-state", "still");
+        }
+
+        }  
+
         function renderButtons() {
 
         // Deletes the games prior to adding new games
@@ -95,11 +113,27 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +game+ "&api_key=dc6zaT
 
       });
 
+
       // Adding click event listeners to all elements with a class of "game"
-      $(document).on("click", ".game", displayGameGifs);
+      
+
+    //   $("#gif-cont").on("click", function(event) {
+    //   console.log("TEST");
+    //   var state = $(this).attr("data-state");
+    
+      
+    //   if (state === "still") {
+    //     $(this).attr("src", $(this).attr("data-animate"));
+    //     $(this).attr("data-state", "animate");
+    //   } else {
+    //     $(this).attr("src", $(this).attr("data-still"));
+    //     $(this).attr("data-state", "still");
+    //   }
+    // });
+
+$(document).on("click", ".game", displayGameGifs);
 
       // Calling the renderButtons function to display the intial buttons
       renderButtons();
-
 
     
