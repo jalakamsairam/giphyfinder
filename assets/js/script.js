@@ -9,14 +9,14 @@
 // 4. When the user clicks one of the still GIPHY images, the gif should animate. If the user clicks the gif again, it should stop playing.
 
 // 5. Under every gif, display its rating (PG, G, so on). 
-//    * This data is provided by the GIPHY API.
+//    * This data is provided haloby the GIPHY API.
 //    * Only once you get images displaying with button presses should you move on to the next step.
 
 // 6. Add a form to your page takes the value from a user input box and adds it into your `topics` array. Then make a function call that takes each topic in the array remakes the buttons on the page.
 
 // 7. Deploy your assignment to Github Pages. -->
 
-var games = ["battlefeild1", "battlefeild3", "call of duty", "black ops"];
+var games = ["gears of war", "medal of honor", "call of duty", "black ops"];
 function displayGameGifs(){
  
 var game = ($(this).attr("data-name"));
@@ -28,11 +28,31 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +game+ "&api_key=dc6zaT
           method: "GET"
         }).done(function(response) {
 
-          // YOUR CODE GOES HERE!!!
+         
           console.log(response);
+
+          var results = response.data;
+
+          for( let i = 0; i< results.length; i++){
+
+            var gameDiv = $("<div class = 'col-lg-4'>");
+            var p = $("<p>").text("Rating: " + results[i].rating);
+            var gameImage = $("<img class = 'img-thumbnail .img-responsive'>");
+            gameImage.attr("src", results[i].images.fixed_height_still.url);
+            gameImage.attr("data-still",results[i].images.fixed_height_still.url);
+            gameImage.attr("data-animate",results[i].images.fixed_height.url);
+            gameImage.attr("data-state","still");
+            gameImage.attr("class", "gif");
+            gameImage.attr("height","200px");
+            gameImage.attr("width","200px");
+            gameDiv.append(gameImage);
+            gameDiv.prepend(p);
+            $("#image-container").prepend(gameDiv);
+
+           }
            
         });
-}
+          }
         function renderButtons() {
 
         // Deletes the games prior to adding new games
